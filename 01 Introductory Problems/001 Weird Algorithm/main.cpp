@@ -1,0 +1,25 @@
+#include<bits/stdc++.h>
+using namespace std;
+#pragma GCC optimize ("Ofast")
+#pragma GCC target ("avx2")
+#define el << '\n'
+#define ll long long
+#define spc << ' '
+#define forn(i,n) for (int i=0; i<n; i++)
+#define MOD 1000000007
+#define MOD2 998244353 
+#define pb push_back
+#define ansyes cout << "YES\n"
+#define ansno cout << "NO\n"
+
+int main() {
+    ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+    ll n; cin >> n;
+    while (n != 1) {
+        cout << n spc;
+        if (n%2==0) n/=2;
+        else n=n*3+1;
+    }
+    cout << 1;
+}
