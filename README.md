@@ -1,0 +1,1 @@
+These are my solutions to the CSES problemset. As of the May 2025 update, it has 400 problems. Many of these solutions were written were written over two years ago and are thus badly formatted, although the newer ones aren't great either.
