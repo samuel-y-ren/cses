@@ -13,26 +13,24 @@ int main() {
     int x[n]; for (int i=0; i<n; ++i) cin >> x[i];
     ll ps[n+1]; ps[0]=0;
     for (int i=0; i<n; ++i) ps[i+1]=ps[i]+x[i];
-    ll dp[n+1][n+1];
-    for (int i=0; i<=n; ++i) for (int j=0; j<=n; ++j) dp[i][j]=1000000000000000000ll;
-    for (int i=0; i<=n; ++i) for (int j=i+1; j<=n; ++j) dp[i][j]=1000000000000000000ll;
-    for (int i=0; i<n; ++i) dp[i][i+1]=0;
-    for (int i=0; i<n-1; ++i) dp[i][i+2]=x[i]+x[i+1];
-    int ptr[n]; for (int i=0; i<n; ++i) ptr[i]=i+1;
-    for (int i=3; i<=n; ++i) {
-        for (int j=0; j<=n-i; ++j) {
-            dp[j][j+i]=dp[j][ptr[j]]+dp[ptr[j]][j+i];
-            while (++ptr[j] && dp[j][ptr[j]]+dp[ptr[j]][j+i]<=dp[j][j+i]) dp[j][j+i]=dp[j][ptr[j]]+dp[ptr[j]][j+i];
-            --ptr[j];
-            dp[j][j+i]+=ps[j+i]-ps[j];
+    ll dp[n+1][n+1]; int mid[n+1][n+1];
+    dp[0][1]=0;
+    for (int i=2; i<=n; ++i) {
+        dp[i-1][i]=0;
+        dp[i-2][i]=ps[i]-ps[i-2];
+        mid[i-2][i]=i-1;
+        for (int j=i-3; ~j; --j) {
+            dp[j][i]=1000000000000000000;
+            for (int k=mid[j][i-1]; k<=mid[j+1][i]; ++k) {
+                ll r=dp[j][k]+dp[k][i];
+                if (r<dp[j][i]) {
+                    dp[j][i]=r;
+                    mid[j][i]=k;
+                }
+            }
+            dp[j][i]+=ps[i]-ps[j];
         }
     }
-    // for (int i=0; i<=n; ++i) {
-    //     for (int j=0; j<=n; ++j) {
-    //         if (dp[i][j]>=1000000000000000000) cout << -1 << ' ';
-    //         else cout << dp[i][j] << ' ';
-    //     }
-    //     cout << '\n';
-    // }
-    cout << dp[0][n];
+    cout << dp[0][n] << '\n';
+
 }
