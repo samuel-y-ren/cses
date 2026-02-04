@@ -1,45 +1,76 @@
-cd // File: main.cpp
+// File: main.cpp
 // Author: Samuel Ren
-// Created: 2025-11-15 11:46:15 EST
+// Created: 2026-02-03 22:36:13 EST
 
 #include <bits/stdc++.h>
 using namespace std;
 
-const int mn=405, me=10005;
 struct edge{
-    int a,b,r,c;
-    edge(int a_, int b_, int r_, int c_) : a(a_), b(b_), r(r_), c(c_) {}
+    int f, c, cap;
 };
-vector<edge> e;
-int d[mn];
-vector<edge>::iterator p[mn];
-int tc=0;
 
-bool sp(int n) {
-    d[1]=0;
-    for (int i=2; i<=n; ++i) d[i]=1000000000;
-    for (int i=0; i<n; ++i) for (auto j=e.begin(); j!=e.end(); ++j) {
-        if (d[j->b] > d[j->a]+j->c && j->r) {
-            d[j->b]=d[j->a]+j->c;
-            p[j->b]=j;
+const int mn=405, inf=1'000'000'000;
+int n;
+
+int pot[mn];
+edge e[mn][mn];
+
+int mcmf(int fn) {
+    int d[n];
+    int prev[n];
+    pair<int,int> tp;
+    int cn;
+    int pt;
+    int tc=0;
+    for (int it=0; it<fn; ++it) {
+        d[0]=0;
+        for (int i=1; i<n; ++i) d[i]=inf;
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>  pq;
+        pq.push({0, 0});
+        while (pq.size()) {
+            tp = pq.top();
+            pq.pop();
+            if (tp.first != d[tp.second]) continue;
+            cn=tp.second;
+            for (int i=0; i<n; ++i) if (e[cn][i].f < e[cn][i].cap && d[cn]+e[cn][i].c+pot[cn] < d[i]+pot[i]) {
+                d[i]=d[cn]+e[cn][i].c+pot[cn]-pot[i];
+                pq.push({d[i], i});
+                prev[i]=cn;
+            }
+        }
+        for (int i=0; i<n; ++i) pot[i] += d[i];
+        tc += pot[n-1];
+        pt=n-1;
+        while (pt) {
+            ++e[prev[pt]][pt].f;
+            --e[pt][prev[pt]].f;
+            pt=prev[pt];
         }
     }
-    if (d[n] < 1000000000) {
-        int cn=n;
-        tc+=d[n];
-        while (cn!=1) {
-            --(p[cn]->r);
-            ++e[(p[cn]-e.begin())^1].r;
-            cn=(p[cn]->a);
-        }
-        return true;
-    }
-    return false;
+    return tc;
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    int n; cin >> n;
-
+    int nv; cin >> nv;
+    n = nv*2+2;
+    int c;
+    for (int i=1; i<=nv; ++i) {
+        for (int j=1; j<=nv; ++j) {
+            cin >> c;
+            e[i][j+nv].c=c;
+            e[i][j+nv].cap=1;
+            e[j+nv][i].c=-c;
+        }
+    }
+    for (int i=1; i<=nv; ++i) {
+        e[0][i].cap=1;
+        e[nv+i][2*nv+1].cap=1;
+    }
+    cout << mcmf(nv) << '\n';
+    for (int i=1; i<=nv; ++i) for (int j=1; j<=nv; ++j) if (e[i][j+nv].f) {
+        cout << i << ' ' << j << '\n';
+        break;
+    }
 }
