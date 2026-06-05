@@ -1,1 +1,2 @@
-These are my solutions to the CSES problemset. As of the May 2025 update, it has 400 problems. Many of these solutions were written were written over two years ago and are thus badly formatted, although the newer ones aren't great either. The files may be refactored/reformatted at a later date.
+These are my solutions to the CSES problemset. As of the May 2025 update, it has 400 problems. Many of these solutions are from old / bad code.
+The repo has been reformatted using the id numbers of the problems, which are stored in the index.json file. 
